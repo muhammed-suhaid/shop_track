@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shop_track/screens/grocery_list.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,7 +12,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Groceries',
+      title: 'Shop Track',
       theme: ThemeData.dark().copyWith(
         colorScheme: ColorScheme.fromSeed(
           seedColor: const Color.fromARGB(255, 147, 229, 250),
@@ -20,7 +21,8 @@ class MyApp extends StatelessWidget {
         ),
         scaffoldBackgroundColor: const Color.fromARGB(255, 50, 58, 60),
       ),
-      // home: ...,
+      debugShowCheckedModeBanner: false,
+      home: const GroceryListScreen(),
     );
   }
 }

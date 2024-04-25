@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shop_track/data/dummy_items.dart';
+import 'package:shop_track/models/grocery_item.dart';
 import 'package:shop_track/screens/new_item.dart';
 
 class GroceryListScreen extends StatefulWidget {
@@ -10,11 +10,22 @@ class GroceryListScreen extends StatefulWidget {
 }
 
 class _GroceryListScreenState extends State<GroceryListScreen> {
-  void _addItem() {
-    Navigator.of(context).push(
+  final List<GroceryItem> _groceryItems = [];
+
+  void _addItem() async {
+    final newItem = await Navigator.of(context).push<GroceryItem>(
       MaterialPageRoute(
         builder: (context) => const NewItemScreen(),
       ),
+    );
+
+    if (newItem == null) {
+      return;
+    }
+    setState(
+      () {
+        _groceryItems.add(newItem);
+      },
     );
   }
 
@@ -22,36 +33,37 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text(
-            'Your Groceries',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
+        title: const Text(
+          'Your Groceries',
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
           ),
-          actions: [
-            IconButton(
-              onPressed: _addItem,
-              icon: const Icon(Icons.add),
-            ),
-          ]),
+        ),
+        actions: [
+          IconButton(
+            onPressed: _addItem,
+            icon: const Icon(Icons.add),
+          ),
+        ],
+      ),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: ListView.builder(
-          itemCount: groceryItems.length,
+          itemCount: _groceryItems.length,
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemBuilder: (context, index) => ListTile(
             title: Text(
-              groceryItems[index].name,
+              _groceryItems[index].name,
             ),
             leading: Container(
               width: 24,
               height: 24,
-              color: groceryItems[index].category.color,
+              color: _groceryItems[index].category.color,
             ),
             trailing: Text(
-              groceryItems[index].quantity.toString(),
+              _groceryItems[index].quantity.toString(),
             ),
           ),
         ),

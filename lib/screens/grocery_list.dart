@@ -16,6 +16,7 @@ class GroceryListScreen extends StatefulWidget {
 class _GroceryListScreenState extends State<GroceryListScreen> {
   List<GroceryItem> _groceryItems = [];
   var _isLoading = true;
+  String? _error;
 
   @override
   void initState() {
@@ -27,6 +28,13 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
     final url = Uri.https(
         'shop-track-b4834-default-rtdb.firebaseio.com', 'shopping-list.json');
     final response = await http.get(url);
+
+    if (response.statusCode >= 400) {
+      setState(() {
+        _error = 'Failed to fetch data. Please try again later.';
+      });
+    }
+
     final Map<String, dynamic> dataList = json.decode(response.body);
     final List<GroceryItem> loadedItems = [];
     for (final item in dataList.entries) {
@@ -104,6 +112,10 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
           ),
         ),
       );
+    }
+
+    if (_error != null) {
+      content = Center(child: Text(_error!));
     }
     return Scaffold(
       appBar: AppBar(

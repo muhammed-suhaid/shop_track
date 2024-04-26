@@ -109,29 +109,25 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
       content = const Center(child: CircularProgressIndicator());
     }
     if (_groceryItems.isNotEmpty) {
-      content = SingleChildScrollView(
+      content = ListView.builder(
+        itemCount: _groceryItems.length,
         physics: const BouncingScrollPhysics(),
-        child: ListView.builder(
-          itemCount: _groceryItems.length,
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemBuilder: (context, index) => Dismissible(
-            key: ValueKey(_groceryItems[index].id),
-            onDismissed: (direction) {
-              _removeItem(_groceryItems[index]);
-            },
-            child: ListTile(
-              title: Text(
-                _groceryItems[index].name,
-              ),
-              leading: Container(
-                width: 24,
-                height: 24,
-                color: _groceryItems[index].category.color,
-              ),
-              trailing: Text(
-                _groceryItems[index].quantity.toString(),
-              ),
+        itemBuilder: (context, index) => Dismissible(
+          key: ValueKey(_groceryItems[index].id),
+          onDismissed: (direction) {
+            _removeItem(_groceryItems[index]);
+          },
+          child: ListTile(
+            title: Text(
+              _groceryItems[index].name,
+            ),
+            leading: Container(
+              width: 24,
+              height: 24,
+              color: _groceryItems[index].category.color,
+            ),
+            trailing: Text(
+              _groceryItems[index].quantity.toString(),
             ),
           ),
         ),

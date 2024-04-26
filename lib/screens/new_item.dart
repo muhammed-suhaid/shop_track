@@ -19,12 +19,12 @@ class _NewItemScreenState extends State<NewItemScreen> {
   var _enteredQuantity = 1;
   var _selectedCategory = categories[Categories.vegetables]!;
 
-  void _saveItem() {
+  void _saveItem() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       final url = Uri.https(
           'shop-track-b4834-default-rtdb.firebaseio.com', 'shopping-list.json');
-      http.post(
+      final response = await http.post(
         url,
         headers: {
           'Content-type': 'application/json',
@@ -37,7 +37,11 @@ class _NewItemScreenState extends State<NewItemScreen> {
           },
         ),
       );
-      //Navigator.of(context).pop();
+
+      if (!context.mounted) {
+        return;
+      }
+      Navigator.of(context).pop();
     }
   }
 
